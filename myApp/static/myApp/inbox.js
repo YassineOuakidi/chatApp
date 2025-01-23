@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const runInvitationCounter = async () => {
       await InvitationCounter();
     };
-  
+    
     runInvitationCounter();
   
     setInterval(runInvitationCounter, 1000);
@@ -247,25 +247,84 @@ async function showFriendsRequest() {
     document.querySelector('body').append(friendsRequestContainer);
 }
 
+function removeSendFriendRequestPopUp(){
+    document.querySelector('.add-friend-container').remove();
 
+}
 
+async function sendFriendRequest(){
+    const myForm = document.querySelector('#friendRequestForm');
+        const formdata = new FormData(myForm);
+
+        await fetch('sendRequest',{
+            method : 'POST',
+            headers: {
+                'X-CSRFToken' : getCookie("csrftoken"), 
+                'Content-Type': 'application/json',
+            },
+            body : JSON.stringify({
+                'username' : formdata.get('username'),
+            })
+        })
+            .then(response => response.json())
+            .then(data=>{
+                document.querySelector('#friend-request-message').innerHTML=data['content'];
+            });
+        
+
+}
  
 async function addFriend(){
-    username = prompt("Enter Friend's username");
-    await fetch('sendRequest',{
-        method : 'POST',
-        headers: {
-            'X-CSRFToken' : getCookie("csrftoken"), 
-            'Content-Type': 'application/json',
-        },
-        body : JSON.stringify({
-            'username' : username,
-        })
-    })
-        .then(response => response.json())
-        .then(data=>{
-            alert(data['content']);
-        })
+    
+    const AddFriendContainer = document.createElement('div');
+    AddFriendContainer.className = 'container-fluid add-friend-container';
+
+    AddFriendContainer.style = `
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 300px;
+        height: 220px; 
+        overflow-y: hidden;
+        background-color: #121212;
+        z-index: 1000;
+        border-radius: 1.5em;
+        border: 2px solid cadetblue;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        opacity: 0.9;
+        padding: 20px;
+    `;
+
+
+    AddFriendContainer.innerHTML = `
+        <div class="container-fluid text-end">
+            <button class="btn btn-danger btn-sm rounded-circle" style="border: none; background-color: cadetblue;" onclick="removeSendFriendRequestPopUp()">X</button>
+        </div>
+        <div class="container-fluid p-0">
+            <form action="" class="container-fluid p-0" id="friendRequestForm">
+                <input type="hidden" name="csrfmiddlewaretoken" value="${getCookie("csrftoken")}">
+                <label for="username-entry" style="color: cadetblue; font-weight: bold;">Enter Username:</label>
+                <input type="text" name="username-entry" class="form-control message-content" required 
+                    style="margin-bottom: 15px; border-radius: 0.5em; padding: 10px; background-color: #333; color: white;">
+                
+                <button type="submit" class="btn btn-secondary container-fluid" onclick="sendFriendRequest()" 
+                    style="border-radius: 0.5em; padding: 10px; background-color: cadetblue; color: white; font-weight: bold;">
+                    Send
+                </button>
+                
+                <div id="friend-request-message" style="color: white; margin-top: 15px;"></div>
+            </form>
+        </div>
+    `;
+
+    document.body.appendChild(AddFriendContainer);
+
+    document.querySelector('body').append(AddFriendContainer);
     
 }
 
