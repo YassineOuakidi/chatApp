@@ -6,7 +6,7 @@ from json import loads
 from django.db.utils import IntegrityError
 from django.contrib import auth
 from django.db.models import Q
-
+from django.views.decorators.csrf import csrf_exempt
 
 def index(request) :
     if not request.user.is_authenticated:
@@ -86,7 +86,7 @@ def number_friends_requests(request):
     return JsonResponse({'number' : number})
     pass
 
-
+@csrf_exempt
 def send_request(request):
     if request.method=='POST':
         post_data = loads(request.body.decode('utf-8'))

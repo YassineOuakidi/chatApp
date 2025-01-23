@@ -252,7 +252,8 @@ function removeSendFriendRequestPopUp(){
 
 }
 
-async function sendFriendRequest(){
+async function sendFriendRequest(event){
+    preventDefault(event);
     const myForm = document.querySelector('#friendRequestForm');
         const formdata = new FormData(myForm);
 
@@ -306,13 +307,13 @@ async function addFriend(){
             <button class="btn btn-danger btn-sm rounded-circle" style="border: none; background-color: cadetblue;" onclick="removeSendFriendRequestPopUp()">X</button>
         </div>
         <div class="container-fluid p-0">
-            <form action="" class="container-fluid p-0" id="friendRequestForm">
+            <form class="container-fluid p-0" id="friendRequestForm">
                 <input type="hidden" name="csrfmiddlewaretoken" value="${getCookie("csrftoken")}">
                 <label for="username-entry" style="color: cadetblue; font-weight: bold;">Enter Username:</label>
                 <input type="text" name="username-entry" class="form-control message-content" required 
                     style="margin-bottom: 15px; border-radius: 0.5em; padding: 10px; background-color: #333; color: white;">
                 
-                <button type="submit" class="btn btn-secondary container-fluid" onclick="sendFriendRequest()" 
+                <button type="submit" class="btn btn-secondary container-fluid" onclick="sendFriendRequest(event)" 
                     style="border-radius: 0.5em; padding: 10px; background-color: cadetblue; color: white; font-weight: bold;">
                     Send
                 </button>
