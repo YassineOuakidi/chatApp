@@ -1,0 +1,23 @@
+body {
+    margin: 0;
+    height: 100vh;
+    background-image: url('https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExZmx1NWRxb2hrOG44ajM3Nm1kang3aGV0ODJvd205ejM0ZnBhMWc2aiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/UC8DbMqXvkpd6/giphy.gif');
+    background-size: cover;
+    background-repeat: repeat;
+    background-position: center;
+}
+
+
+#my-container{
+    background-color: black;
+    opacity: 0.9;
+}
+#my-container:hover{
+    opacity: 1000;
+}
+
+#login-panel label , #registration-panel label{
+    color: cadetblue;
+    font-weight: 600;
+}
+
