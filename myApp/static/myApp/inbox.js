@@ -253,7 +253,7 @@ function removeSendFriendRequestPopUp(){
 }
 
 async function sendFriendRequest(event){
-    preventDefault(event);
+    event.preventDefault(event);
     const myForm = document.querySelector('#friendRequestForm');
         const formdata = new FormData(myForm);
 
@@ -264,7 +264,7 @@ async function sendFriendRequest(event){
                 'Content-Type': 'application/json',
             },
             body : JSON.stringify({
-                'username' : formdata.get('username'),
+                'username' : formdata.get('username-entry'),
             })
         })
             .then(response => response.json())
@@ -290,7 +290,7 @@ async function addFriend(){
         left: 50%;
         transform: translate(-50%, -50%);
         width: 300px;
-        height: 220px; 
+        height: 270px; 
         overflow-y: hidden;
         background-color: #121212;
         z-index: 1000;
@@ -306,19 +306,19 @@ async function addFriend(){
         <div class="container-fluid text-end">
             <button class="btn btn-danger btn-sm rounded-circle" style="border: none; background-color: cadetblue;" onclick="removeSendFriendRequestPopUp()">X</button>
         </div>
-        <div class="container-fluid p-0">
-            <form class="container-fluid p-0" id="friendRequestForm">
+        <div class="container-fluid p-0" style="height : 100%">
+            <form class="container-fluid p-0 flex" id="friendRequestForm" style="height:100%">
                 <input type="hidden" name="csrfmiddlewaretoken" value="${getCookie("csrftoken")}">
                 <label for="username-entry" style="color: cadetblue; font-weight: bold;">Enter Username:</label>
-                <input type="text" name="username-entry" class="form-control message-content" required 
+                <input type="text" name="username-entry" class="form-control message-content" required autocomplete="off"
                     style="margin-bottom: 15px; border-radius: 0.5em; padding: 10px; background-color: #333; color: white;">
-                
-                <button type="submit" class="btn btn-secondary container-fluid" onclick="sendFriendRequest(event)" 
-                    style="border-radius: 0.5em; padding: 10px; background-color: cadetblue; color: white; font-weight: bold;">
+                <div id="friend-request-message" style="color: cadetblue; margin-top: 15px;font-size:medium"></div>
+                <button type="submit" class="btn btn-secondary container-fluid " 
+                    style="border-radius: 0.5em; padding: 10px; background-color: cadetblue; color: white; font-weight: bold;margin-top:15px;">
                     Send
                 </button>
                 
-                <div id="friend-request-message" style="color: white; margin-top: 15px;"></div>
+                
             </form>
         </div>
     `;
@@ -326,6 +326,10 @@ async function addFriend(){
     document.body.appendChild(AddFriendContainer);
 
     document.querySelector('body').append(AddFriendContainer);
+    document.getElementById('friendRequestForm').addEventListener('submit', function(event) {
+        event.preventDefault();  
+        sendFriendRequest(event);  
+    });
     
 }
 
